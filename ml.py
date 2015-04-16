@@ -9,6 +9,7 @@ import numpy as np
 import smote
 import pickle
 import time
+import itertools
 
 
 from sklearn import preprocessing as prep
@@ -64,17 +65,12 @@ def cartesian(arrays, out=None):
     return out
 
 
-def fitMACCEsvm(X_train,y_test,gamma=1,C=1):
+def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
 
     #split data by class,
-    haveResponse = X_train[y_test==1]
-    noResponse = X_train[y_test==0]
-    
-
-    
+    haveResponse = X_train[y_train==1]
+    noResponse = X_train[y_train==0]
     #imputer (fill in missing data)
-
-
     haveImp = prep.Imputer(missing_values="NaN", strategy='mean', axis=0)
     noImp = prep.Imputer(missing_values="NaN", strategy='mean', axis=0)
     
@@ -85,25 +81,25 @@ def fitMACCEsvm(X_train,y_test,gamma=1,C=1):
     noR = noImp.transform(noResponse)
 
     #SMOTE
-
     imbalance = int(round(100*len(noR)/(100*len(haveR)))*100)
     newSamples = smote.SMOTE(haveR,imbalance,5)
     fsHR = np.concatenate((haveR,newSamples))
 
     #recombine the two matrices
-    
-
     currFeats = np.concatenate((fsHR,noR))
     currResps = np.concatenate((np.ones(len(fsHR)),np.zeros(len(noR))))
     
+    #fill in 
     imputer = prep.Imputer(missing_values = "NaN",strategy="mean",axis=0)
     imputer.fit(currFeats)
     
-    classifier = make_pipeline(prep.StandardScaler(), svm.SVC(kernel='rbf',gamma=hyperParams[j][1],C=hyperParams[j][0]))
-    
+    if classifierType=='svc':
+        classifier = make_pipeline(prep.StandardScaler(), svm.SVC(kernel='rbf',gamma=params[1],C=params[0]))
+        
+    elif classifierType=='svcLinear':
+        classifier = make_pipeline(prep.StandardScaler(), svm.LinearSVC(C=params[0],penalty = params[1],dual=False))
+        
     classifier.fit(currFeats,currResps)
-
-    
     return classifier,imputer
     
 
@@ -112,7 +108,7 @@ def fitMACCEsvm(X_train,y_test,gamma=1,C=1):
 
 '''
 
-
+#Load Data
 with open("mlData.dat","rb") as f:
     allMatrix = pickle.load(f)
     complications =pickle.load(f)
@@ -124,32 +120,55 @@ with open("mlData.dat","rb") as f:
 response = anyComp
 #response = deathVector
 
+#Choose number of folds
 nFolds = 5;
+
+###Choose Type of Classified
+#type of classifier, choose, modify, comment out/in, one of the classifiers below
+#SVC classifier
+#classifierType = 'svc'
+#cRange = np.linspace(4,30,10)
+#gammaRange = np.logspace(-3,-1,10)
+##cRange = [10000]
+##gammaRange = [0.0001]
+#hList = [cRange,gammaRange]
+
+
+#SVC Linear
+classifierType = 'svcLinear'
 cRange = np.linspace(4,30,10)
-gammaRange = np.logspace(-3,-1,10)
-#cRange = [10000]
-#gammaRange = [0.0001]
+penaltyType = ['l1','l2']
+hList = [cRange,penaltyType]
 
 
-hyperParams = cartesian((cRange,gammaRange))
 
+###end of classifier choice
 
+#Generate Hyper parameter list
+hyperParams = []
+for i in itertools.product(*hList):
+    hyperParams.append(i)
+    
+#Set up metric arrays
 accAll = np.zeros(len(hyperParams))
 fAll = np.zeros(len(hyperParams))
 rocAll = np.zeros(len(hyperParams))
+
+#run the classification
 for j in range(len(hyperParams)):
-    print 'currently trying  C = ' + str(hyperParams[j][0]) +', gamma =  ' + str(hyperParams[j][1]),
+    print 'currently trying  C = ' + str(hyperParams[j][0]) +',param2 =  ' + str(hyperParams[j][1]) + ',',
     skf = cross_validation.StratifiedKFold(response, n_folds=nFolds,shuffle= True)
     
     accArray = []
     fArray = []
     rocArray = []
+    #for each k-fold
     for train_index, test_index in skf:
         X_train, X_test = featuresMatrix[train_index], featuresMatrix[test_index]
         y_train, y_test = response[train_index], response[test_index]
     
         
-        clf,fullImp = fitMACCEsvm(X_train,y_train,hyperParams[j][0],hyperParams[j][1])
+        clf,fullImp = fitMACCEsvm(X_train,y_train,classifierType,hyperParams[j])
         X_test = fullImp.transform(X_test)
         y_hat = clf.predict(X_test)
         
