@@ -126,6 +126,7 @@ nFolds = 5;
 ###Choose Type of Classified
 #type of classifier, choose, modify, comment out/in, one of the classifiers below
 #SVC classifier
+
 #classifierType = 'svc'
 #cRange = np.linspace(4,30,10)
 #gammaRange = np.logspace(-3,-1,10)
@@ -135,9 +136,12 @@ nFolds = 5;
 
 
 #SVC Linear
+
 classifierType = 'svcLinear'
-cRange = np.linspace(4,30,10)
-penaltyType = ['l1','l2']
+#cRange = np.linspace(4,30,10)
+#penaltyType = ['l1','l2']
+cRange = [5]
+penaltyType = ['l1']
 hList = [cRange,penaltyType]
 
 
