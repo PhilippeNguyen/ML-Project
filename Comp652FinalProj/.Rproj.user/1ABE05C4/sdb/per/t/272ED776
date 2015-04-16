@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1428820929118.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "272ED776",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "red.dat.recod3",
+        "contentUrl" : "content?title=red.dat.recod3&file=828e32f857344fadae4a434428021b94.htm",
+        "displayedObservations" : "1000",
+        "displayedVariables" : 54,
+        "totalObservations" : "4604",
+        "variables" : "52"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

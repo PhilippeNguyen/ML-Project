@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1428435808802.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "AC64E51A",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "MI",
+        "contentUrl" : "content?title=MI&file=0fc86a5e7db446349de68ad1bf64fe73.htm",
+        "displayedObservations" : 1000,
+        "displayedVariables" : 100,
+        "totalObservations" : 4604,
+        "variables" : 111
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

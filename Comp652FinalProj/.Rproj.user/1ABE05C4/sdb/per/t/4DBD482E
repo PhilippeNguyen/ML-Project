@@ -1,0 +1,17 @@
+{
+    "contents" : "#packages to required\nrequire(plyr)\nrequire(sqldf)\n\n#\ndat <- read.csv(\"minh_optimarevised_original.csv\", header = T, na.strings=c(\"\",\" \",\"NA\", \"UNK\", \"UNKNOWN\", \"ND\", \"#NULL!\", \"UK\"))\nvars <- c(\"hypothyroid\", \"age\", \"stemi\", \"mi\", \"femal\", \"weight\", \"race\", \"activesmoker\", \"asa\", \"antiplatelet\", \"antiplateletintravenous\", \"baselinecreat\", \"peakcreatinine\", \"baselinehemoglobin\", \"nadirhemoglobin\", \"baselineplatelets\", \"baselineldl\", \"baselinehdl\", \"typeoftrop\", \"troppeak\", \"ejectionfraction\", \"cath\", \"diseasedarteries\", \"angioplasty\", \"number.ofstents\", \"INHOSPCABG\", \"shock\", \"stroke\", \"mechanicalventilation\", \"chf\", \"cardiogenicshock\", \"ventriculararrythmia\", \"atrialfibrillation\", \"bradyarrythmia\", \"arrrythmia\", \"cardiacarrest\", \"timibleed\", \"gibleed\", \"infection\", \"death\", \"diabetes\", \"hypertension\", \"priorpci\", \"priorrevasc\", \"priorcabg\", \"priorcvatia\", \"antiplateletondischarge\", \"bbprescribed\", \"statinsprescribed\", \"aceinhibitorprescribed\", \"arbprescribed\", \"cablocker\")\n\n#prints the names\nnames(dat)\n\n#makes sure all the names match up\nfor(v in vars){\n  print(v)\n  dat[v]\n}\n\n\n#STEP 1 - keep required variables; correct spelling of hospital\nred.dat <- dat[vars]\n#names(red.dat)[names(red.dat) == \"hopsital\"] <- \"hospital\"\n#hospital already dropped...\n\n\nwrite.csv(red.dat, file=\"output1.csv\")\n\n#STEP 2 - turn yes no into 1, 0\n\nred.dat.recod1 <- data.frame(apply(red.dat, 2, function(x) {x[x == \"YES\"] <- 1; x}))\nred.dat.recod2 <- data.frame(apply(red.dat.recod1, 2, function(x) {x[x == \"NO\"] <- 0; x}))\n\n#STEP 3 - turn diseased arteries into 1, 0\nred.dat.recod2$diseasedarteries01 <- 0\nred.dat.recod2$diseasedarteries01[!is.na(red.dat.recod2$diseasedarteries)] <- 1\nred.dat.recod3 <- subset(red.dat.recod2, select = -c(diseasedarteries))\n\nwrite.csv(red.dat.recod3, file=\"output2.csv\")\n\n#STEP 3A - turn typeoftrop into 1,0 (T=1, I=0)\nred.dat.recod3$typeoftrop <- revalue(red.dat.recod3$typeoftrop, c(\"T\"=1, \n                                                         \"I\"=0))\n\n#STEP 4 - turn factors into indicators\nred.dat.race.ind <- data.frame(model.matrix(~race -1, data=red.dat.recod3))\nred.dat.race.ind$row.names.1 <- row.names(red.dat.race.ind)\n\nred.dat.recod3$row.names.1 <- 1:nrow(red.dat.recod3)\n\n\nred.dat.ind <- merge(x = red.dat.recod3, y = red.dat.race.ind, by = \"row.names.1\", all.x=TRUE)\nred.dat.ind <- subset(red.dat.ind , select = -c(row.names.1, race))\n\n#STEP 5 - recode NA's to -1 \ndat.final <- data.frame(apply(red.dat.ind, 2, function(x) {x[is.na(x)] <- -1; x}))\n\n#STEP 6 - recode all other characters into NA's\ndat.final <- data.frame(apply(dat.final, 2, function(x) {x[is.character(x)] <- -1; x}))\n\nwrite.csv(dat.final, file=\"outputFinal.csv\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1428814861060.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "465067808",
+    "id" : "4DBD482E",
+    "lastKnownWriteTime" : 1428825531,
+    "path" : "~/R/Comp652FinalProj/dataprep.R",
+    "project_path" : "dataprep.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

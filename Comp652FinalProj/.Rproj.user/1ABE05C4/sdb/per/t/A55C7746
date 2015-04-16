@@ -1,0 +1,16 @@
+{
+    "contents" : "presentationtest\n========================================================\nauthor: \ndate: \n\nFirst Slide\n========================================================\n\nFor more details on authoring R presentations click the\n**Help** button on the toolbar.\n\n- Bullet 1\n- Bullet 2\n- Bullet 3\n\nSlide With Code\n========================================================\n\n```{r}\nsummary(cars)\n```\n\nSlide With Plot\n========================================================\n\n```{r, echo=FALSE}\nplot(cars)\n```\n",
+    "created" : 1428826997967.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3961130960",
+    "id" : "A55C7746",
+    "lastKnownWriteTime" : 1428827026,
+    "path" : "~/R/Comp652FinalProj/presentationtest.Rpres",
+    "project_path" : "presentationtest.Rpres",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_presentation"
+}
