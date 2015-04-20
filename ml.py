@@ -53,18 +53,20 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     haveR = haveImp.transform(haveResponse)
     noR = noImp.transform(noResponse)
 
-    #SMOTE
-    minorityPercent = 100;
-    imbalance = int(minorityPercent*round(100*len(noR)/(100*len(haveR))))
+    #50% SMOTE, 50% undersampling
+    minorityPercent = 50;
+    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
     newSamples = smote.SMOTE(haveR,imbalance,5)
     fsHR = np.concatenate((haveR,newSamples))
-    
+    majorityPercent = 50
+    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+    noR = np.delete(noR,removeIndices,axis = 0)
     
     
     #NOSMOTE case
 #    fsHR = haveR
     
-    #SMOTE AND UNDERSAMPLING
+    #SMOTE AND hyperparameter UNDERSAMPLING
 #    minorityPercent =params[2];
 #    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
 #    newSamples = smote.SMOTE(haveR,imbalance,5)

@@ -44,6 +44,9 @@ with open("mlData.dat","r") as f: #try "rb" or "r", depending on computer
 #remove first hypertension vector
 #featuresMatrix = featuresMatrix[:,1:]
     
+#use only ER variables
+featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
+    
 ##choose one below to be the response vector
 #response = anyComp
 response = deathVector
@@ -56,8 +59,8 @@ nFolds = 5;
 #SVC classifier
 
 classifierType = 'svc'
-cRange = np.linspace(1,10,5)
-gammaRange = np.logspace(-3,-2,5)
+cRange = np.linspace(1,10,10)
+gammaRange = np.logspace(-4,-2,10)
 #cRange = [6]
 #gammaRange = [0.001]
 
