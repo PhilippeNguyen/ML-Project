@@ -34,12 +34,15 @@ import numpy as np
     
 
 #Load Data
-with open("mlData.dat","rb") as f:
+with open("mlData.dat","r") as f: #try "rb" or "r", depending on computer
     allMatrix = pickle.load(f)
     complications =pickle.load(f)
     featuresMatrix =pickle.load(f)
     deathVector = pickle.load(f)
     anyComp = pickle.load(f)
+    
+#remove first hypertension vector
+#featuresMatrix = featuresMatrix[:,1:]
     
 ##choose one below to be the response vector
 #response = anyComp
@@ -53,11 +56,23 @@ nFolds = 5;
 #SVC classifier
 
 classifierType = 'svc'
-cRange = np.linspace(4,30,10)
-gammaRange = np.logspace(-3,-1,10)
-#cRange = [20]
+cRange = np.linspace(1,10,5)
+gammaRange = np.logspace(-3,-2,5)
+#cRange = [6]
 #gammaRange = [0.001]
+
 hList = [[cRange,gammaRange],['C','gamma']]
+
+##SVC classifier with varying SMOTE
+#
+#classifierType = 'svc'
+##cRange = np.linspace(1,10,5)
+##gammaRange = np.logspace(-3,-2,5)
+#cRange = [6]
+#gammaRange = [0.001]
+#minorityPercent = np.linspace(50,500,40)
+#majorityPercent = [0]
+#hList = [[cRange,gammaRange,minorityPercent,majorityPercent],['C','gamma','minorityPercent','majorityPercent']]
 
 
 #SVC Linear
@@ -92,4 +107,4 @@ hList = [[cRange,gammaRange],['C','gamma']]
 
 ################################################
 #Run the Classifier
-ml.runClassifier(featuresMatrix,response,nFolds,classifierType,hList)
+accAll, fAll, rocAll = ml.runClassifier(featuresMatrix,response,nFolds,classifierType,hList)

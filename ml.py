@@ -54,9 +54,24 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     noR = noImp.transform(noResponse)
 
     #SMOTE
-    imbalance = int(round(100*len(noR)/(100*len(haveR)))*100)
+    minorityPercent = 100;
+    imbalance = int(minorityPercent*round(100*len(noR)/(100*len(haveR))))
     newSamples = smote.SMOTE(haveR,imbalance,5)
     fsHR = np.concatenate((haveR,newSamples))
+    
+    
+    
+    #NOSMOTE case
+#    fsHR = haveR
+    
+    #SMOTE AND UNDERSAMPLING
+#    minorityPercent =params[2];
+#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+#    newSamples = smote.SMOTE(haveR,imbalance,5)
+#    fsHR = np.concatenate((haveR,newSamples))
+#    majorityPercent = params[3]
+#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+#    noR = np.delete(noR,removeIndices,axis = 0)
 
     #recombine the two matrices
     currFeats = np.concatenate((fsHR,noR))
@@ -140,6 +155,6 @@ def runClassifier(featuresMatrix,response,nFolds,classifierType,hList):
     
     
     
-    
+    return accAll, fAll, rocAll
     
     
