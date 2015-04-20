@@ -74,6 +74,12 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
 #    majorityPercent = params[3]
 #    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
 #    noR = np.delete(noR,removeIndices,axis = 0)
+    
+    #JUST UNDERSAMPLING
+#    fsHR = haveR
+#    majorityPercent = (len(noR)/float(len(noR)+len(haveR)))*100.0
+#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+#    noR = np.delete(noR,removeIndices,axis = 0)
 
     #recombine the two matrices
     currFeats = np.concatenate((fsHR,noR))

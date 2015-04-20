@@ -45,7 +45,7 @@ with open("mlData.dat","r") as f: #try "rb" or "r", depending on computer
 #featuresMatrix = featuresMatrix[:,1:]
     
 #use only ER variables
-featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
+#featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
     
 ##choose one below to be the response vector
 #response = anyComp
