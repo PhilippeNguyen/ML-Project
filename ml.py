@@ -54,14 +54,14 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     noR = noImp.transform(noResponse)
 
     #50% SMOTE, 50% undersampling
-    minorityPercent = 50;
-    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
-    newSamples = smote.SMOTE(haveR,imbalance,5)
-    fsHR = np.concatenate((haveR,newSamples))
-    majorityPercent = 50
-    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-    noR = np.delete(noR,removeIndices,axis = 0)
-    
+#    minorityPercent = 50;
+#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+#    newSamples = smote.SMOTE(haveR,imbalance,5)
+#    fsHR = np.concatenate((haveR,newSamples))
+#    majorityPercent = 50
+#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+#    noR = np.delete(noR,removeIndices,axis = 0)
+#    
     
     #NOSMOTE case
 #    fsHR = haveR
@@ -76,10 +76,10 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
 #    noR = np.delete(noR,removeIndices,axis = 0)
     
     #JUST UNDERSAMPLING
-#    fsHR = haveR
-#    majorityPercent = (len(noR)/float(len(noR)+len(haveR)))*100.0
-#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-#    noR = np.delete(noR,removeIndices,axis = 0)
+    fsHR = haveR
+    majorityPercent = (len(noR)/float(len(noR)+len(haveR)))*100.0
+    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+    noR = np.delete(noR,removeIndices,axis = 0)
 
     #recombine the two matrices
     currFeats = np.concatenate((fsHR,noR))
@@ -110,12 +110,15 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
 
 
 
-def runClassifier(featuresMatrix,response,nFolds,classifierType,hList):
+def runCVClassifier(featuresMatrix,response,nFolds,classifierType,hList):
     
     #Generate Hyper parameter list
+    
     hyperParams = []
+
     for i in itertools.product(*hList[0]):
         hyperParams.append(i)
+
         
     #Set up metric arrays
     accAll = np.zeros(len(hyperParams))
@@ -163,6 +166,45 @@ def runClassifier(featuresMatrix,response,nFolds,classifierType,hList):
     
     
     
-    return accAll, fAll, rocAll
+    return accAll, fAll, rocAll,hyperParams
     
+def runTestClassifier(X_train,X_test,y_train,y_test,classifierType,hList):
+    
+    #Generate Hyper parameter list
+    
+
+    hyperParams = [hList[0]]
+        
+    #Set up metric arrays
+    accAll = np.zeros(len(hyperParams))
+    fAll = np.zeros(len(hyperParams))
+    rocAll = np.zeros(len(hyperParams))
+    
+    #run the classification
+    
+    print 'Testing Set'
+    
+    
+
+    #for each k-fold
+
+    
+    
+    clf,fullImp = fitMACCEsvm(X_train,y_train,classifierType,hyperParams[0])
+    X_test = fullImp.transform(X_test)
+    y_hat = clf.predict(X_test)
+    
+    
+    '''Metrics on prediction
+    '''
+    correct = (np.equal(y_hat,y_test)).astype('float')
+    acc = sum(correct)/len(correct)
+    fScore = metrics.f1_score(y_test,y_hat)
+    roc_score = metrics.roc_auc_score(y_test,y_hat)
+    
+    print 'accuracy = '+  str(acc) +  '  F = '+ str(fScore)+ '  ROC = '+ str(roc_score)
+    
+    
+    
+    return acc,fScore,roc_score
     
