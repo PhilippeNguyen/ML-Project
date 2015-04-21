@@ -54,13 +54,13 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     noR = noImp.transform(noResponse)
 
     #50% SMOTE, 50% undersampling
-#    minorityPercent = 50;
-#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
-#    newSamples = smote.SMOTE(haveR,imbalance,5)
-#    fsHR = np.concatenate((haveR,newSamples))
-#    majorityPercent = 50
-#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-#    noR = np.delete(noR,removeIndices,axis = 0)
+    minorityPercent = 50;
+    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+    newSamples = smote.SMOTE(haveR,imbalance,5)
+    fsHR = np.concatenate((haveR,newSamples))
+    majorityPercent = 50
+    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+    noR = np.delete(noR,removeIndices,axis = 0)
 #    
     
     #NOSMOTE case
@@ -76,10 +76,10 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
 #    noR = np.delete(noR,removeIndices,axis = 0)
     
     #JUST UNDERSAMPLING
-    fsHR = haveR
-    majorityPercent = (len(noR)/float(len(noR)+len(haveR)))*100.0
-    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-    noR = np.delete(noR,removeIndices,axis = 0)
+#    fsHR = haveR
+#    majorityPercent = (len(noR)/float(len(noR)+len(haveR)))*100.0
+#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+#    noR = np.delete(noR,removeIndices,axis = 0)
 
     #recombine the two matrices
     currFeats = np.concatenate((fsHR,noR))

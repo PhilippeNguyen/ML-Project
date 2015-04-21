@@ -8,6 +8,8 @@ import pickle
 import ml
 import numpy as np
 
+from sklearn import cross_validation
+
 ##This is now pickled
 
 #aa = np.loadtxt(open("outputFinalNoRow.csv","rb"),delimiter=",")
@@ -108,6 +110,27 @@ hList = [[cRange,gammaRange],['C','gamma']]
 
 ###end of classifier choice
 
+
+
+#create test set, use 1/5th of the data as test set
+#using the method similar to cv to get test set
+#true cross validation will still be used in the runClassifier
+skf = cross_validation.StratifiedKFold(response, n_folds=5,shuffle= True,random_state=0)
+trainIndices,testIndices = iter(skf).next()
+trainFeatures = featuresMatrix[trainIndices]
+trainResponses = response[trainIndices]
+testFeatures = featuresMatrix[testIndices]
+testResponses= response[testIndices]
+
+
+
 ################################################
 #Run the Classifier
-accAll, fAll, rocAll = ml.runClassifier(featuresMatrix,response,nFolds,classifierType,hList)
+accAll, fAll, rocAll,hParams = ml.runCVClassifier(trainFeatures,trainResponses,nFolds,classifierType,hList)
+
+#Choose the hyperparameters that maximize the metric
+bestIndex = np.argmax(rocAll)
+bestParams = list(hParams[bestIndex])
+#Re-train the classifier on the training set using the chosen hyper parameters, and test on the test set
+accTest,fTest,rocTest = ml.runTestClassifier(trainFeatures,testFeatures,trainResponses,testResponses,classifierType,[bestParams,hList[1]])
+
