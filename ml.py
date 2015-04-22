@@ -54,26 +54,32 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     noR = noImp.transform(noResponse)
 
     #50% SMOTE, 50% undersampling
-    minorityPercent = 50;
-    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
-    newSamples = smote.SMOTE(haveR,imbalance,5)
-    fsHR = np.concatenate((haveR,newSamples))
-    majorityPercent = 50
-    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-    noR = np.delete(noR,removeIndices,axis = 0)
-#    
+#    minorityPercent = 50;
+#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+#    newSamples = smote.SMOTE(haveR,imbalance,5)
+#    fsHR = np.concatenate((haveR,newSamples))
+#    majorityPercent = 50
+#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+#    noR = np.delete(noR,removeIndices,axis = 0)
     
+    #SMOTE ONLY
+#    minorityPercent = 100;
+#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+#    newSamples = smote.SMOTE(haveR,imbalance,5)
+#    fsHR = np.concatenate((haveR,newSamples))
+ 
+
     #NOSMOTE case
 #    fsHR = haveR
     
     #SMOTE AND hyperparameter UNDERSAMPLING
-#    minorityPercent =params[2];
-#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
-#    newSamples = smote.SMOTE(haveR,imbalance,5)
-#    fsHR = np.concatenate((haveR,newSamples))
-#    majorityPercent = params[3]
-#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-#    noR = np.delete(noR,removeIndices,axis = 0)
+    minorityPercent =params[2];
+    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+    newSamples = smote.SMOTE(haveR,imbalance,5)
+    fsHR = np.concatenate((haveR,newSamples))
+    majorityPercent = params[3]
+    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+    noR = np.delete(noR,removeIndices,axis = 0)
     
     #JUST UNDERSAMPLING
 #    fsHR = haveR
@@ -174,18 +180,10 @@ def runTestClassifier(X_train,X_test,y_train,y_test,classifierType,hList):
     
 
     hyperParams = [hList[0]]
-        
-    #Set up metric arrays
-    accAll = np.zeros(len(hyperParams))
-    fAll = np.zeros(len(hyperParams))
-    rocAll = np.zeros(len(hyperParams))
-    
     #run the classification
     
     print 'Testing Set'
     
-    
-
     #for each k-fold
 
     

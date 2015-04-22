@@ -59,25 +59,27 @@ nFolds = 5;
 ###Choose Type of Classified
 #type of classifier, choose, modify, comment out/in, one of the classifiers below
 #SVC classifier
-
-classifierType = 'svc'
-cRange = np.linspace(1,10,10)
-gammaRange = np.logspace(-4,-2,10)
-#cRange = [6]
-#gammaRange = [0.001]
-
-hList = [[cRange,gammaRange],['C','gamma']]
+#
+#classifierType = 'svc'
+#cRange = np.linspace(1,4,10)
+#gammaRange = np.logspace(-4,-2,10)
+##cRange = [6]
+##gammaRange = [0.001]
+#
+#hList = [[cRange,gammaRange],['C','gamma']]
 
 ##SVC classifier with varying SMOTE
 #
-#classifierType = 'svc'
-##cRange = np.linspace(1,10,5)
-##gammaRange = np.logspace(-3,-2,5)
-#cRange = [6]
-#gammaRange = [0.001]
-#minorityPercent = np.linspace(50,500,40)
-#majorityPercent = [0]
-#hList = [[cRange,gammaRange,minorityPercent,majorityPercent],['C','gamma','minorityPercent','majorityPercent']]
+classifierType = 'svc'
+cRange = np.linspace(0.5,5,10)
+gammaRange = np.logspace(-4,-2,10)
+#cRange = [2.66666666667]
+#gammaRange = [0.00046415888336127773]
+minorityPercent = [100]
+majorityPercent = [50]
+#minorityPercent = np.linspace(50,300,6)
+#majorityPercent = np.linspace(0,90,10)
+hList = [[cRange,gammaRange,minorityPercent,majorityPercent],['C','gamma','minorityPercent','majorityPercent']]
 
 
 #SVC Linear
