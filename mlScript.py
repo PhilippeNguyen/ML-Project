@@ -47,7 +47,7 @@ with open("mlData.dat","r") as f: #try "rb" or "r", depending on computer
 #featuresMatrix = featuresMatrix[:,1:]
     
 #use only ER variables
-#featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
+featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
     
 ##choose one below to be the response vector
 #response = anyComp
@@ -70,27 +70,27 @@ nFolds = 5;
 
 ##SVC classifier with varying SMOTE
 #
-classifierType = 'svc'
-cRange = np.linspace(0.5,5,10)
-gammaRange = np.logspace(-4,-2,10)
-#cRange = [2.66666666667]
-#gammaRange = [0.00046415888336127773]
-minorityPercent = [100]
-majorityPercent = [50]
-#minorityPercent = np.linspace(50,300,6)
-#majorityPercent = np.linspace(0,90,10)
-hList = [[cRange,gammaRange,minorityPercent,majorityPercent],['C','gamma','minorityPercent','majorityPercent']]
+#classifierType = 'svc'
+#cRange = np.linspace(0.5,5,10)
+#gammaRange = np.logspace(-4,-2,10)
+##cRange = [2.66666666667]
+##gammaRange = [0.00046415888336127773]
+#minorityPercent = [100]
+#majorityPercent = [0]
+##minorityPercent = np.linspace(50,300,6)
+##majorityPercent = np.linspace(0,90,10)
+#hList = [[cRange,gammaRange,minorityPercent,majorityPercent],['C','gamma','minorityPercent','majorityPercent']]
 
 
 #SVC Linear
 ##
-#classifierType = 'svcLinear'
-##cRange = np.linspace(4,30,10)
-#cRange = np.logspace(-5,5,50)
-##penaltyType = ['l1','l2']
-##cRange = [0.0003]
-#penaltyType = ['l1']
-#hList = [[cRange,penaltyType],['C','penalty']]
+classifierType = 'svcLinear'
+#cRange = np.linspace(4,30,10)
+cRange = np.logspace(-5,5,50)
+#penaltyType = ['l1','l2']
+#cRange = [0.0003]
+penaltyType = ['l1']
+hList = [[cRange,penaltyType],['C','penalty']]
 
 #adaboost SVC
 #
@@ -134,5 +134,5 @@ accAll, fAll, rocAll,hParams = ml.runCVClassifier(trainFeatures,trainResponses,n
 bestIndex = np.argmax(rocAll)
 bestParams = list(hParams[bestIndex])
 #Re-train the classifier on the training set using the chosen hyper parameters, and test on the test set
-accTest,fTest,rocTest = ml.runTestClassifier(trainFeatures,testFeatures,trainResponses,testResponses,classifierType,[bestParams,hList[1]])
+accTest,fTest,rocTest,clf = ml.runTestClassifier(trainFeatures,testFeatures,trainResponses,testResponses,classifierType,[bestParams,hList[1]])
 

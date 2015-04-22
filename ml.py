@@ -53,14 +53,14 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     haveR = haveImp.transform(haveResponse)
     noR = noImp.transform(noResponse)
 
-    #50% SMOTE, 50% undersampling
-#    minorityPercent = 50;
-#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
-#    newSamples = smote.SMOTE(haveR,imbalance,5)
-#    fsHR = np.concatenate((haveR,newSamples))
-#    majorityPercent = 50
-#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-#    noR = np.delete(noR,removeIndices,axis = 0)
+    # SMOTE, and undersampling, non-hyperparameter
+    minorityPercent = 100
+    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+    newSamples = smote.SMOTE(haveR,imbalance,5)
+    fsHR = np.concatenate((haveR,newSamples))
+    majorityPercent = 0
+    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+    noR = np.delete(noR,removeIndices,axis = 0)
     
     #SMOTE ONLY
 #    minorityPercent = 100;
@@ -73,13 +73,13 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
 #    fsHR = haveR
     
     #SMOTE AND hyperparameter UNDERSAMPLING
-    minorityPercent =params[2];
-    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
-    newSamples = smote.SMOTE(haveR,imbalance,5)
-    fsHR = np.concatenate((haveR,newSamples))
-    majorityPercent = params[3]
-    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
-    noR = np.delete(noR,removeIndices,axis = 0)
+#    minorityPercent =params[2];
+#    imbalance = int((minorityPercent/100.0)*round(len(noR)/(len(haveR))))*100
+#    newSamples = smote.SMOTE(haveR,imbalance,5)
+#    fsHR = np.concatenate((haveR,newSamples))
+#    majorityPercent = params[3]
+#    removeIndices = np.random.choice(len(noR),int((majorityPercent/100.0)*len(noR)),replace=False)
+#    noR = np.delete(noR,removeIndices,axis = 0)
     
     #JUST UNDERSAMPLING
 #    fsHR = haveR
@@ -96,7 +96,7 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     imputer.fit(currFeats)
     
     if classifierType=='svc':
-        classifier = make_pipeline(prep.StandardScaler(), svm.SVC(kernel='rbf',gamma=params[1],C=params[0]))
+        classifier = make_pipeline(prep.StandardScaler(), svm.SVC(kernel='poly',degree=4,gamma=params[1],C=params[0]))
         
     elif classifierType=='svcLinear':
         classifier = make_pipeline(prep.StandardScaler(), svm.LinearSVC(C=params[0],penalty = params[1],dual=False))
@@ -204,5 +204,5 @@ def runTestClassifier(X_train,X_test,y_train,y_test,classifierType,hList):
     
     
     
-    return acc,fScore,roc_score
+    return acc,fScore,roc_score,clf
     
