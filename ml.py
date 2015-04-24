@@ -17,6 +17,7 @@ from sklearn import svm
 from sklearn import metrics
 from sklearn import ensemble
 
+from sklearn import linear_model
 
 
 def cartesian(arrays, out=None):
@@ -108,6 +109,9 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
         baseSVM = svm.LinearSVC(C=params[0],penalty = params[1],dual=False)
         adaSVM = ensemble.AdaBoostClassifier(base_estimator = baseSVM,algorithm = 'SAMME')
         classifier = make_pipeline(prep.StandardScaler(),adaSVM)
+    elif classifierType == 'logistic':        
+        logReg = linear_model.LogisticRegression(C = params[0],penalty = params[1])
+        classifier = make_pipeline(prep.StandardScaler(),logReg)
         
     classifier.fit(currFeats,currResps)
     return classifier,imputer

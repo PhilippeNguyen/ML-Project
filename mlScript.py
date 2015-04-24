@@ -47,7 +47,7 @@ with open("mlData.dat","r") as f: #try "rb" or "r", depending on computer
 #featuresMatrix = featuresMatrix[:,1:]
     
 #use only ER variables
-featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
+#featuresMatrix = featuresMatrix[:,[1,4,24,26,28,29]]
     
 ##choose one below to be the response vector
 #response = anyComp
@@ -84,13 +84,13 @@ nFolds = 5;
 
 #SVC Linear
 ##
-classifierType = 'svcLinear'
-#cRange = np.linspace(4,30,10)
-cRange = np.logspace(-5,5,50)
-#penaltyType = ['l1','l2']
-#cRange = [0.0003]
-penaltyType = ['l1']
-hList = [[cRange,penaltyType],['C','penalty']]
+#classifierType = 'svcLinear'
+##cRange = np.linspace(4,30,10)
+#cRange = np.logspace(-5,5,50)
+##penaltyType = ['l1','l2']
+##cRange = [0.0003]
+#penaltyType = ['l1']
+#hList = [[cRange,penaltyType],['C','penalty']]
 
 #adaboost SVC
 #
@@ -105,7 +105,16 @@ hList = [[cRange,penaltyType],['C','penalty']]
 #
 #classifierType = 'dTreeAdaboost'
 
-#neural net
+#logistic regression
+
+
+classifierType = 'logistic'
+#cRange = np.linspace(4,30,10)
+cRange = np.logspace(-5,5,50)
+#penaltyType = ['l1','l2']
+#cRange = [0.0003]
+penaltyType = ['l2']
+hList = [[cRange,penaltyType],['C','penalty']]
 
 
 
