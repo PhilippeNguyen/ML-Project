@@ -53,6 +53,9 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     
     haveR = haveImp.transform(haveResponse)
     noR = noImp.transform(noResponse)
+    
+    
+#    TESTING = np.concatenate((haveR,noR))
 
     # SMOTE, and undersampling, non-hyperparameter
     minorityPercent = 100
