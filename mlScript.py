@@ -60,13 +60,14 @@ nFolds = 5;
 #type of classifier, choose, modify, comment out/in, one of the classifiers below
 #SVC classifier
 #
-#classifierType = 'svc'
-#cRange = np.linspace(1,4,10)
-#gammaRange = np.logspace(-4,-2,10)
-##cRange = [6]
-##gammaRange = [0.001]
-#
-#hList = [[cRange,gammaRange],['C','gamma']]
+classifierType = 'svc'
+
+cRange = np.linspace(0.5,5,10)
+gammaRange = np.logspace(-4,-2,10)
+#cRange = [6]
+#gammaRange = [0.001]
+
+hList = [[cRange,gammaRange],['C','gamma']]
 
 ##SVC classifier with varying SMOTE
 #
@@ -108,13 +109,13 @@ nFolds = 5;
 #logistic regression
 
 
-classifierType = 'logistic'
-#cRange = np.linspace(4,30,10)
-cRange = np.logspace(-5,5,50)
-#penaltyType = ['l1','l2']
-#cRange = [0.0003]
-penaltyType = ['l2']
-hList = [[cRange,penaltyType],['C','penalty']]
+#classifierType = 'logistic'
+##cRange = np.linspace(4,30,10)
+#cRange = np.logspace(-5,5,50)
+##penaltyType = ['l1','l2']
+##cRange = [0.0003]
+#penaltyType = ['l2']
+#hList = [[cRange,penaltyType],['C','penalty']]
 
 
 

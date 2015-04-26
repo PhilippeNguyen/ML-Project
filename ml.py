@@ -16,6 +16,7 @@ from sklearn import cross_validation
 from sklearn import svm
 from sklearn import metrics
 from sklearn import ensemble
+from sklearn import decomposition
 
 from sklearn import linear_model
 
@@ -100,7 +101,7 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
     imputer.fit(currFeats)
     
     if classifierType=='svc':
-        classifier = make_pipeline(prep.StandardScaler(), svm.SVC(kernel='poly',degree=4,gamma=params[1],C=params[0]))
+        classifier = make_pipeline(prep.StandardScaler(),svm.SVC(kernel='rbf',gamma=params[1],C=params[0]))
         
     elif classifierType=='svcLinear':
         classifier = make_pipeline(prep.StandardScaler(), svm.LinearSVC(C=params[0],penalty = params[1],dual=False))
@@ -112,7 +113,7 @@ def fitMACCEsvm(X_train,y_train,classifierType = 'svc', params = []):
         baseSVM = svm.LinearSVC(C=params[0],penalty = params[1],dual=False)
         adaSVM = ensemble.AdaBoostClassifier(base_estimator = baseSVM,algorithm = 'SAMME')
         classifier = make_pipeline(prep.StandardScaler(),adaSVM)
-    elif classifierType == 'logistic':        
+    elif classifierType == 'logistic':
         logReg = linear_model.LogisticRegression(C = params[0],penalty = params[1])
         classifier = make_pipeline(prep.StandardScaler(),logReg)
         
